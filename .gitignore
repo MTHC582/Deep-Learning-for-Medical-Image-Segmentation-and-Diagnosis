@@ -1,0 +1,5 @@
+venv/
+OLD/
+models/
+Data/
+__pycache__/   
