@@ -7,7 +7,7 @@ A comprehensive study on skin lesion segmentation using progressive improvements
 This project implements three progressively improved models for automated melanoma detection through skin lesion segmentation:
 
 1. **Basic U-Net**: Baseline implementation following the original U-Net architecture
-2. **U-Net with Augmented Loss**: Enhanced with combined BCE + Dice loss and learning rate scheduling
+2. **U-Net with Augmentations and Combined Loss**: Enhanced with combined BCE + Dice loss and learning rate scheduling along with Augmentations applied using Albumentations library
 3. **Attention U-Net with Grad-CAM**: Advanced model with attention mechanisms, batch normalization, dropout, and interpretability through Grad-CAM visualizations
 
 ## 🎯 Key Results
@@ -27,11 +27,11 @@ This project implements three progressively improved models for automated melano
 - Binary Cross-Entropy (BCE) loss
 - Simple Adam optimizer with fixed learning rate (1e-3)
 
-### Version 2: U-Net with Augmented Loss
+### Version 2: U-Net with Augmentation and Combined Loss
 - **Combined Loss Function**: BCE + Dice loss for better boundary detection
 - **Learning Rate Scheduler**: ReduceLROnPlateau for adaptive learning
 - **Extended Training**: 50 epochs vs 20 epochs
-- **Lower Initial LR**: 1e-4 for more stable convergence
+- **Common Augmentations**: Horizontal flip, Vertical flip, Random rotate and Random brightness Contrast
 
 ### Version 3: Attention U-Net
 - **Attention Gates**: Focus on relevant features at each decoder level
@@ -148,21 +148,3 @@ skin-lesion-segmentation/
 - **NumPy**: Numerical computations
 - **Matplotlib**: Visualization
 - **tqdm**: Progress tracking
-
-## 📄 License
-
-This project is available for educational and research purposes.
-
-## 🤝 Acknowledgments
-
-- ISIC 2016 Challenge organizers for the dataset
-- Original U-Net paper: Ronneberger et al., "U-Net: Convolutional Networks for Biomedical Image Segmentation"
-- Attention U-Net paper: Oktay et al., "Attention U-Net: Learning Where to Look for the Pancreas"
-
-## 📧 Contact
-
-For questions or collaboration opportunities, please open an issue in this repository.
-
----
-
-**Note**: This project demonstrates the progressive improvement of segmentation models through architectural enhancements and training optimization techniques.
