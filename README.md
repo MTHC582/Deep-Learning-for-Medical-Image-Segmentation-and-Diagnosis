@@ -1,150 +1,196 @@
-# Skin Lesion Segmentation using U-Net Variants
+# Skin Lesion Segmentation using Progressive U-Net Variants
 
-A comprehensive study on skin lesion segmentation using progressive improvements to the U-Net architecture, implemented on the ISIC 2016 dataset. This project demonstrates iterative enhancements from a baseline U-Net to an advanced Attention U-Net with Grad-CAM visualization.
+A structured study on skin lesion segmentation using progressively improved U-Net architectures on the ISIC 2016 dataset. The project demonstrates systematic improvements from a baseline U-Net to an enhanced Attention U-Net with interpretability using Grad-CAM.
+
+---
 
 ## Project Overview
 
-This project implements three progressively improved models for automated melanoma detection through skin lesion segmentation:
+This project follows a three-stage experimental progression to improve segmentation performance:
 
-1. **Basic U-Net**: Baseline implementation following the original U-Net architecture
-2. **U-Net with Augmentations and Combined Loss**: Enhanced with combined BCE + Dice loss and learning rate scheduling along with Augmentations applied using Albumentations library
-3. **Attention U-Net with Grad-CAM**: Advanced model with attention mechanisms, batch normalization, dropout, and interpretability through Grad-CAM visualizations
+1. **Stage 1 — Baseline U-Net**
+
+   * Standard encoder-decoder architecture
+   * Binary Cross-Entropy (BCE) loss
+   * No augmentation
+
+2. **Stage 2 — U-Net with Augmentation and Combined Loss**
+
+   * Data augmentation using Albumentations
+   * Combined BCE + Dice loss
+   * Extended training
+
+3. **Stage 3 — Improved Attention U-Net**
+
+   * Attention gates on skip connections
+   * Batch Normalization and Spatial Dropout
+   * Deeper architecture (4 encoder-decoder levels)
+   * AdamW optimizer with weight decay
+   * Cosine Annealing with Warm Restarts (SGDR)
+   * Gradient clipping and early stopping
+   * Grad-CAM for interpretability
+
+---
 
 ## Key Results
 
-| Model | Dice Score | IoU Score | Improvement |
-|-------|-----------|-----------|-------------|
-| Basic U-Net | 0.7596 | 0.6182 | Baseline |
-| U-Net + Augmented Loss | 0.8701 | 0.7752 | +14.5% Dice, +25.4% IoU |
-| Attention U-Net | **0.9095** | **0.8348** | +19.7% Dice, +35.0% IoU |
+| Model                                 | Dice Score | IoU Score  |
+| ------------------------------------- | ---------- | ---------- |
+| Stage 1 — Baseline U-Net              | 0.7596     | 0.6182     |
+| Stage 2 — U-Net + Augmentation + Dice | 0.8701     | 0.7752     |
+| Stage 3 — Attention U-Net             | **0.9095** | **0.8348** |
 
-## Architecture Improvements
+**Total Improvement:**
 
-### Version 1: Basic U-Net
-- Standard encoder-decoder architecture with skip connections
-- 3 encoding and 3 decoding levels
-- MaxPooling for downsampling, ConvTranspose2d for upsampling
-- Binary Cross-Entropy (BCE) loss
-- Simple Adam optimizer with fixed learning rate (1e-3)
+* Dice: +0.1499 (+19.7%)
+* IoU: +0.2166 (+35.0%)
 
-### Version 2: U-Net with Augmentation and Combined Loss
-- **Combined Loss Function**: BCE + Dice loss for better boundary detection
-- **Learning Rate Scheduler**: ReduceLROnPlateau for adaptive learning
-- **Extended Training**: 50 epochs vs 20 epochs
-- **Common Augmentations**: Horizontal flip, Vertical flip, Random rotate and Random brightness Contrast
-
-### Version 3: Attention U-Net
-- **Attention Gates**: Focus on relevant features at each decoder level
-- **Batch Normalization**: Improved training stability
-- **Dropout Regularization**: Reduced overfitting (p=0.1)
-- **Deeper Architecture**: 4 encoding/decoding levels for better feature extraction
-- **Advanced Optimization**:
-  - Cosine annealing LR scheduler with warm restarts
-  - Gradient clipping (max_norm=1.0)
-  - Kaiming weight initialization
-  - Early stopping (patience=15)
-- **Grad-CAM Visualization**: Model interpretability and attention analysis
+---
 
 ## Dataset
 
-**ISIC 2016 Challenge - Skin Lesion Segmentation**
-- Training Images: 900 dermoscopic images
-- Resolution: Resized to 256×256 for computational efficiency
-- Train/Val Split: 80/20 (720/180)
-- Data Format: RGB images with binary masks
+**ISIC 2016 (ISBI Part 1) — Skin Lesion Segmentation**
 
-## How to Run
+* Total Images: 900
+* Train/Validation Split: 80% / 20% (720 / 180)
+* Input Size: 256 × 256 (resized)
+* Channels: RGB (3-channel)
+* Output: Binary segmentation mask
+* Class Imbalance: ~16% lesion, ~84% background
 
-### Prerequisites
+---
 
-```bash
-# Clone the repository
-git clone https://github.com/<yourusername>/skin-lesion-segmentation.git
-cd skin-lesion-segmentation
+## Methodology
 
-# Install dependencies
-pip install -r requirements.txt
-```
+### Stage 1 — Baseline
 
-### Dataset Setup
+* 3-level U-Net (64 → 128 → 256 → 512)
+* BCEWithLogitsLoss
+* Adam optimizer (lr = 1e-3)
+* No regularization or augmentation
 
-1. Download the ISIC 2016 dataset:
-   - Training Data: `ISBI2016_ISIC_Part1_Training_Data.zip`
-   - Ground Truth: `ISBI2016_ISIC_Part1_Training_GroundTruth.zip`
+### Stage 2 — Improvements
 
-2. Update the paths in the notebooks:
-   ```python
-   RAW_IMG_DIR = "path/to/ISBI2016_ISIC_Part1_Training_Data"
-   RAW_MASK_DIR = "path/to/ISBI2016_ISIC_Part1_Training_GroundTruth"
-   ```
+* Augmentations:
 
-### Running the Notebooks
+  * Horizontal flip
+  * Vertical flip
+  * Random rotation (90°)
+  * Brightness and contrast adjustment
+* Combined loss:
 
-**For Google Colab:**
-1. Upload the notebooks to Google Colab
-2. Mount your Google Drive and update dataset paths
-3. Ensure GPU runtime is enabled (Runtime → Change runtime type → GPU)
-4. Run all cells sequentially
+  * BCE + Dice Loss
+* Training extended to 50 epochs
 
-**For Local Execution:**
-```bash
-# Start Jupyter Notebook
-jupyter notebook
+### Stage 3 — Advanced Model
 
-# Open and run the notebooks in order:
-# 1. 1_basic_unet.ipynb
-# 2. 2_unet_augmented_loss.ipynb
-# 3. 3_Attention_unet_grad_cam.ipynb
-```
+* 4-level U-Net (up to 1024 channels)
+* Attention gates in skip connections
+* BatchNorm + Spatial Dropout (p = 0.15)
+* Kaiming weight initialization
+* AdamW optimizer (lr = 3e-4, wd = 1e-4)
+* CosineAnnealingWarmRestarts scheduler
+* Gradient clipping (max_norm = 1.0)
+* Early stopping (patience = 15)
 
-### Training
+---
 
-Each notebook follows this workflow:
-1. Data preprocessing and augmentation
-2. Model architecture definition
-3. Training loop with validation
-4. Performance evaluation (Dice & IoU metrics)
-5. Visualization of predictions
+## Interpretability — Grad-CAM
 
-**Training Configuration:**
-- Batch Size: 8
-- Image Size: 256×256
-- Device: CUDA (GPU recommended)
-- Epochs: 20 (Basic), 50 (Augmented), 60 (Attention)
+Grad-CAM is applied to the final model to visualize important regions influencing predictions.
 
-## Evaluation Metrics
+Findings:
 
-- **Dice Score**: Measures overlap between prediction and ground truth
-- **IoU (Intersection over Union)**: Jaccard index for segmentation accuracy
-- **Binary Cross-Entropy Loss**: Primary optimization objective
-- **Dice Loss**: Additional regularization for boundary precision
+* Strong activation in lesion regions
+* Suppression of background and artefacts
+* Confirms meaningful feature learning
 
-## Technical Highlights
-
-### Attention Mechanism
-The attention gates selectively emphasize relevant features from encoder skip connections, improving localization of lesion boundaries while suppressing irrelevant background features.
-
-### Grad-CAM Visualization
-Gradient-weighted Class Activation Mapping provides insight into which regions the model focuses on during segmentation, enabling verification that the model learns clinically relevant features.
-
-### Loss Function Design
-The combined BCE + Dice loss addresses both pixel-level classification (BCE) and global region overlap (Dice), resulting in more accurate and contiguous segmentations.
+---
 
 ## Repository Structure
 
 ```
 skin-lesion-segmentation/
-├── 1_basic_unet.ipynb              # Baseline U-Net implementation
-├── 2_unet_augmented_loss.ipynb     # U-Net with enhanced loss
-├── 3_Attention_unet_grad_cam.ipynb # Attention U-Net with visualization
-├── requirements.txt                 # Python dependencies
-└── README.md                        # Project documentation
+├── 1_basic_unet.ipynb
+├── 2_unet_augmented_loss.ipynb
+├── 3_attention_unet_grad_cam.ipynb
+├── requirements.txt
+└── README.md
 ```
 
-## Technologies Used
+---
 
-- **PyTorch**: Deep learning framework
-- **OpenCV**: Image processing
-- **NumPy**: Numerical computations
-- **Matplotlib**: Visualization
-- **tqdm**: Progress tracking
+## How to Run (Google Collab recommended)
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/MTHC582/Deep-Learning-for-Medical-Image-Segmentation-and-Diagnosis.git
+cd Deep-Learning-for-Medical-Image-Segmentation-and-Diagnosis
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Dataset Setup
+
+Download and unzip dataset from:
+https://drive.google.com/drive/folders/1n26atMzMNBzVBD27l2w8CrNH-q_eMkwW
+
+First two cells in each notebook are for unzipping. It is recommended to unzip manually and ignore the first 2 cells.
+
+Update paths in 3rd cell of the notebooks (in accordance with manual unzipping):
+```python
+RAW_IMG_DIR = "path/to/images"
+RAW_MASK_DIR = "path/to/masks"
+```
+
+---
+
+### 4. Run Notebooks
+
+Run in order:
+
+1. `1_basic_unet.ipynb`
+2. `2_unet_augmented_loss.ipynb`
+3. `3_attention_unet_grad_cam.ipynb`
+
+**Recommended:** Use Google Colab with GPU enabled.
+
+---
+
+## Evaluation Metrics
+
+* **Dice Score** — overlap between prediction and ground truth
+* **IoU (Intersection over Union)** — segmentation accuracy
+* **BCE Loss** — pixel-wise classification
+* **Dice Loss** — region-level overlap optimization
+
+---
+
+## Key Insights
+
+* Loss function design significantly impacts performance
+* Data augmentation improves generalization on small datasets
+* Attention mechanisms enhance feature selection
+* Training strategies (AdamW, SGDR, regularization) improve convergence
+* Interpretability methods validate model behavior
+
+---
+
+## Limitations
+
+* Results are based on a validation split, not the official ISIC test set
+* Performance may vary with different dataset splits
+* Small lesions and artefacts remain challenging cases
+
+---
+
+## Conclusion
+
+This project demonstrates that systematic improvements in architecture, loss functions, and training strategies can significantly enhance segmentation performance. The final Attention U-Net achieves competitive results while maintaining interpretability through Grad-CAM, making it suitable for further research in medical image analysis.
+
+---
