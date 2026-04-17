@@ -3,3 +3,5 @@ OLD/
 models/
 Data/
 __pycache__/   
+1_Data_Processing.ipynb
+2_Models_&Training.ipynb
