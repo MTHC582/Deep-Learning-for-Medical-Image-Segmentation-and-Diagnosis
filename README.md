@@ -2,7 +2,7 @@
 
 A comprehensive study on skin lesion segmentation using progressive improvements to the U-Net architecture, implemented on the ISIC 2016 dataset. This project demonstrates iterative enhancements from a baseline U-Net to an advanced Attention U-Net with Grad-CAM visualization.
 
-## 📋 Project Overview
+## Project Overview
 
 This project implements three progressively improved models for automated melanoma detection through skin lesion segmentation:
 
@@ -10,7 +10,7 @@ This project implements three progressively improved models for automated melano
 2. **U-Net with Augmentations and Combined Loss**: Enhanced with combined BCE + Dice loss and learning rate scheduling along with Augmentations applied using Albumentations library
 3. **Attention U-Net with Grad-CAM**: Advanced model with attention mechanisms, batch normalization, dropout, and interpretability through Grad-CAM visualizations
 
-## 🎯 Key Results
+## Key Results
 
 | Model | Dice Score | IoU Score | Improvement |
 |-------|-----------|-----------|-------------|
@@ -18,7 +18,7 @@ This project implements three progressively improved models for automated melano
 | U-Net + Augmented Loss | 0.8701 | 0.7752 | +14.5% Dice, +25.4% IoU |
 | Attention U-Net | **0.9095** | **0.8348** | +19.7% Dice, +35.0% IoU |
 
-## 🏗️ Architecture Improvements
+## Architecture Improvements
 
 ### Version 1: Basic U-Net
 - Standard encoder-decoder architecture with skip connections
@@ -45,7 +45,7 @@ This project implements three progressively improved models for automated melano
   - Early stopping (patience=15)
 - **Grad-CAM Visualization**: Model interpretability and attention analysis
 
-## 📊 Dataset
+## Dataset
 
 **ISIC 2016 Challenge - Skin Lesion Segmentation**
 - Training Images: 900 dermoscopic images
@@ -53,13 +53,13 @@ This project implements three progressively improved models for automated melano
 - Train/Val Split: 80/20 (720/180)
 - Data Format: RGB images with binary masks
 
-## 🚀 How to Run
+## How to Run
 
 ### Prerequisites
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/skin-lesion-segmentation.git
+git clone https://github.com/<yourusername>/skin-lesion-segmentation.git
 cd skin-lesion-segmentation
 
 # Install dependencies
@@ -112,14 +112,14 @@ Each notebook follows this workflow:
 - Device: CUDA (GPU recommended)
 - Epochs: 20 (Basic), 50 (Augmented), 60 (Attention)
 
-## 📈 Evaluation Metrics
+## Evaluation Metrics
 
 - **Dice Score**: Measures overlap between prediction and ground truth
 - **IoU (Intersection over Union)**: Jaccard index for segmentation accuracy
 - **Binary Cross-Entropy Loss**: Primary optimization objective
 - **Dice Loss**: Additional regularization for boundary precision
 
-## 🔬 Technical Highlights
+## Technical Highlights
 
 ### Attention Mechanism
 The attention gates selectively emphasize relevant features from encoder skip connections, improving localization of lesion boundaries while suppressing irrelevant background features.
@@ -130,7 +130,7 @@ Gradient-weighted Class Activation Mapping provides insight into which regions t
 ### Loss Function Design
 The combined BCE + Dice loss addresses both pixel-level classification (BCE) and global region overlap (Dice), resulting in more accurate and contiguous segmentations.
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 skin-lesion-segmentation/
@@ -141,7 +141,7 @@ skin-lesion-segmentation/
 └── README.md                        # Project documentation
 ```
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **PyTorch**: Deep learning framework
 - **OpenCV**: Image processing
